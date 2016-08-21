@@ -1,0 +1,13 @@
+# Default values for croc-hunter.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+
+Name: croc-hunter
+Image: "lachlanevenson/croc-hunter"
+ImageTag: "v1"
+Replicas: 3
+Component: "croc-hunter"
+Cpu: "100m"
+ServicePort: 80
+ContainerPort: 8080

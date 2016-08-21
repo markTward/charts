@@ -1,0 +1,8 @@
+name: croc-hunter
+version: 0.1.0
+description: A Croc-hunter Helm chart for Kubernetes.
+sources:
+  - https://github.com/lachie83/croc-hunter
+maintainers:
+  - name: Lachlan Evenson
+    email: lachlan@deis.com
