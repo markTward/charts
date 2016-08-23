@@ -10,4 +10,4 @@ Replicas: 3
 Component: "croc-hunter"
 Cpu: "100m"
 ServicePort: 80
-ContainerPort: 8080
+ContainerPort: 80
