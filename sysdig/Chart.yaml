@@ -1,0 +1,9 @@
+name: sysdig
+home: https://sysdig.com/
+version: 0.1.0
+description: Sysdig Helm chart for Kubernetes.
+sources:
+  - https://github.com/draios/sysdig
+maintainers:
+  - name: Lachlan Evenson
+    email: lachlan@deis.com

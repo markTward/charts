@@ -1,0 +1,12 @@
+# Default values for sysdig.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+
+Name: sysdig-agent
+Component: "sysdig-agent"
+Image: "sysdig/agent"
+ImageTag: "latest"
+ImagePullPolicy: "Always"
+#AccessKey: Required "8312341g-5678-abcd-4a2b2c-33bcsd655"
+#AgentTags: "" Optional kv agent tags format "key:val,key2:val2"
