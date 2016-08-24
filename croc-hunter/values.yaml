@@ -5,7 +5,7 @@
 
 Name: croc-hunter
 Image: "lachlanevenson/croc-hunter"
-ImageTag: "v1"
+ImageTag: "v2"
 Replicas: 3
 Component: "croc-hunter"
 Cpu: "100m"
