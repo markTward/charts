@@ -1,0 +1,23 @@
+### Vault config
+
+backend "consul" {
+  address = "%%CONSUL_HOST%%:%%CONSUL_PORT%%"
+  path = "vault"
+  advertise_addr = "https://%%VAULT_IP%%:%%VAULT_HTTPS_PORT%%"
+  scheme = "%%CONSUL_SCHEME%%"
+  token = %%CONSUL_TOKEN%%
+  tls_skip_verify = 1
+}
+
+listener "tcp" {
+  address = "%%VAULT_IP%%:%%VAULT_HTTPS_PORT%%"
+  tls_key_file = "/etc/vault/ssl/vault.key"
+  tls_cert_file = "/etc/vault/ssl/vault.crt"
+}
+
+listener "tcp" {
+  address = "%%VAULT_IP%%:%%VAULT_HTTP_PORT%%"
+  tls_disable = 1
+}
+
+disable_mlock = true
