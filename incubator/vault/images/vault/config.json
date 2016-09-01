@@ -15,9 +15,4 @@ listener "tcp" {
   tls_cert_file = "/etc/vault/ssl/vault.crt"
 }
 
-listener "tcp" {
-  address = "%%VAULT_IP%%:%%VAULT_HTTP_PORT%%"
-  tls_disable = 1
-}
-
 disable_mlock = true
