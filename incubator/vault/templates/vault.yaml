@@ -1,85 +1,108 @@
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-token
+type: Opaque
+data:
+  consul-token: {{ randAlphaNum 24 | b64enc }}
+---
+apiVersion: v1
 kind: Service
 metadata:
-  name: vault
-  namespace: kube-system
+  name: "{{ printf "%s-%s" .Release.Name .Values.Name | trunc 24 }}"
   labels:
-    name: vault
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    component: "{{.Release.Name}}-{{.Values.Component}}"
+  annotations:
+    "helm.sh/created": {{.Release.Time.Seconds | quote }}
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
 spec:
   ports:
     - name: vaultport
-      port: ###SOME_VAULT_PORT_HERE###
+      port: {{.Values.VaultPort}}
       protocol: TCP
-      targetPort: ###SOME_VAULT_PORT_HERE###
-    - name: vaultporthttp
-      port: 8200
-      protocol: TCP
-      targetPort: 8200
   selector:
-    app: vault
+    component: "{{.Release.Name}}-{{.Values.Component}}"
 ---
+#apiVersion: extensions/v1beta1
+#kind: Ingress
+#metadata:
+#  name: vault
+#  namespace: kube-system
+#  labels:
+#    ssl: "true"
+#spec:
+#  rules:
+#  - host: ###vault%%ENVIRONMENT%%.somedomain.com###
+#    http:
+#      paths:
+#      - backend:
+#          serviceName: vault
+#          servicePort: ###SOME_HIGH_PORT_HTTPS###
+#        path: /
+#---
 apiVersion: extensions/v1beta1
-kind: Ingress
+kind: Deployment
 metadata:
-  name: vault
-  namespace: kube-system
+  name: "{{ printf "%s-%s" .Release.Name .Values.Name | trunc 24 }}"
   labels:
-    ssl: "true"
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    component: "{{.Release.Name}}-{{.Values.Name}}"
+  annotations:
+    "helm.sh/created": {{.Release.Time.Seconds | quote }}
 spec:
-  rules:
-  - host: ###vault%%ENVIRONMENT%%.somedomain.com###
-    http:
-      paths:
-      - backend:
-          serviceName: vault
-          servicePort: ###SOME_HIGH_PORT_HTTPS###
-        path: /
----
-apiVersion: v1
-kind: ReplicationController
-metadata:
-  name: vault
-  namespace: kube-system
-spec:
-  replicas: 3
+  replicas: {{default 1 .Values.Replicas | quote }}
+  strategy:
+    type: RollingUpdate
   selector:
-    app: vault
+    matchLabels:
+      component: "{{.Release.Name}}-{{.Values.Component}}"
   template:
     metadata:
       labels:
-        pool: vaultpool
-        app: vault
+        heritage: {{.Release.Service | quote }}
+        release: {{.Release.Name | quote }}
+        chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+        component: "{{.Release.Name}}-{{.Values.Component}}"
     spec:
       containers:
-        - name: vault
-          image: '###BUILD_YOUR_IMAGE_AND_PUT_IT_HERE###'
-          imagePullPolicy: Always
+        - name: "{{ printf "%s-%s" .Release.Name .Values.Name | trunc 24 }}"
+          image: "{{.Values.Image}}:{{.Values.ImageTag}}"
+          imagePullPolicy: "{{.Values.ImagePullPolicy}}"
           env:
+            - name: CONSUL_SERVICE_HOST
+              value: "{{ .Values.ConsulServiceHost }}"
+            - name: CONSUL_SERVICE_PORT
+              value: "{{ .Values.ConsulServicePort }}"
             - name: CONSUL_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: vault-mgmt
-                  key: vault-mgmt
+                  name: consul-token
+                  key: consul-token
             - name: "VAULT_DEBUG"
               value: "false"
             - name: "VAULT_SSL_KEY"
               valueFrom:
                 secretKeyRef:
-                  name: ###MY_SSL_KEY###
-                  key: ###key###
+                  name: vault-tls
+                  key: key
             - name: "VAULT_SSL_CRT"
               valueFrom:
                 secretKeyRef:
-                  name: ###MY_SSL_CRT###
-                  key: ###CRT###
+                  name: vault-tls
+                  key: cert
+          ports:
+            - containerPort: {{.Values.VaultPort}}
+          resources:
+            requests:
+              cpu: "{{.Values.Cpu}}"
           readinessProbe:
             httpGet:
               path: /v1/sys/health
-              port: 8200
+              port: {{.Values.VaultPort}}
             initialDelaySeconds: 10
             timeoutSeconds: 1
-          ports:
-            - containerPort: ###SOME_VAULT_HTTPS_PORT###
-              name: vaultport
-            - containerPort: 8200
-              name: vaulthttpport

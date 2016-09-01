@@ -12,8 +12,7 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.docker.dockerfile="/Dockerfile"
 
 ENV VAULT_VERSION 0.6.1
-ENV VAULT_HTTP_PORT 8080
-ENV VAULT_HTTPS_PORT 8443
+ENV VAULT_HTTPS_PORT 8200
 
 COPY config.json /etc/vault/config.json
 
@@ -24,7 +23,6 @@ RUN apk --update add openssl zip\
 && mv vault /usr/local/bin/ \
 && rm -f vault_${VAULT_VERSION}_linux_amd64.zip
 
-EXPOSE ${VAULT_HTTP_PORT}
 EXPOSE ${VAULT_HTTPS_PORT}
 
 COPY /run.sh /usr/bin/run.sh

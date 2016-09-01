@@ -1,3 +1,9 @@
-description: A Helm chart for Kubernetes
 name: vault
+home: https://github.com/hashicorp/vault
 version: 0.1.0
+description: Hashicorp Vault Helm chart for Kubernetes.
+sources:
+  - http://www.devoperandi.com/vault-in-kubernetes-take-2/
+maintainers:
+  - name: Lachlan Evenson
+    email: lachlan@deis.com

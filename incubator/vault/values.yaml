@@ -2,3 +2,14 @@
 # This is a YAML-formatted file.
 # Declare name/value pairs to be passed into your templates.
 # name: value
+
+Name: vault
+VaultPort: 8500
+Component: "vault"
+Replicas: 3
+Image: "lachlanevenson/vault"
+ImageTag: "0.6.1"
+ImagePullPolicy: "Always"
+Cpu: "100m"
+ConsulServiceHost: "consul.consul.svc.cluster.local"
+ConsulServicePort: 8500
