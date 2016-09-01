@@ -4,12 +4,12 @@
 # name: value
 
 Name: vault
-VaultPort: 8500
+VaultPort: 8200
 Component: "vault"
 Replicas: 3
 Image: "lachlanevenson/vault"
-ImageTag: "0.6.1"
+ImageTag: "v0.6.1"
 ImagePullPolicy: "Always"
 Cpu: "100m"
-ConsulServiceHost: "consul.consul.svc.cluster.local"
+ConsulServiceHost: "100.66.129.60"
 ConsulServicePort: 8500

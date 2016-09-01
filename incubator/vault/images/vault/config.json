@@ -5,7 +5,6 @@ backend "consul" {
   path = "vault"
   advertise_addr = "https://%%VAULT_IP%%:%%VAULT_HTTPS_PORT%%"
   scheme = "%%CONSUL_SCHEME%%"
-  token = %%CONSUL_TOKEN%%
   tls_skip_verify = 1
 }
 

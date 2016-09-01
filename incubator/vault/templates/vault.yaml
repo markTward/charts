@@ -7,6 +7,15 @@ data:
   consul-token: {{ randAlphaNum 24 | b64enc }}
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-tls
+type: Opaque
+data:
+  key:
+  cert:
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: "{{ printf "%s-%s" .Release.Name .Values.Name | trunc 24 }}"
@@ -84,7 +93,7 @@ spec:
                   name: consul-token
                   key: consul-token
             - name: "VAULT_DEBUG"
-              value: "false"
+              value: "true"
             - name: "VAULT_SSL_KEY"
               valueFrom:
                 secretKeyRef:
@@ -100,9 +109,9 @@ spec:
           resources:
             requests:
               cpu: "{{.Values.Cpu}}"
-          readinessProbe:
-            httpGet:
-              path: /v1/sys/health
-              port: {{.Values.VaultPort}}
-            initialDelaySeconds: 10
-            timeoutSeconds: 1
+        #  readinessProbe:
+        #    httpGet:
+        #      path: /v1/sys/health
+        #      port: {{.Values.VaultPort}}
+        #    initialDelaySeconds: 10
+        #    timeoutSeconds: 1
