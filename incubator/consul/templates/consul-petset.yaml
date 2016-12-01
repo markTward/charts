@@ -6,6 +6,25 @@ type: Opaque
 data:
   gossip-key: {{ randAlphaNum 24 | b64enc }}
 ---
+{{- if .Values.uiService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ printf "%s-%s" .Release.Name .Values.Name | trunc 24 }}-ui"
+  labels:
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    component: "{{.Release.Name}}-{{.Values.Component}}"
+spec:
+  ports:
+  - name: http
+    port: {{.Values.HttpPort}}
+  selector:
+    component: "{{.Release.Name}}-{{.Values.Component}}"
+  type: "{{.Values.uiService.type}}"
+{{- end }}
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -145,6 +164,9 @@ spec:
             done
 
             exec /bin/consul agent \
+            {{- if .Values.ui.enabled }}
+              -ui \
+            {{- end }}
               -data-dir=/var/lib/consul \
               -server \
               -bootstrap-expect=${INITIAL_CLUSTER_SIZE} \

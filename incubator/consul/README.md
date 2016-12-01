@@ -48,6 +48,9 @@ The following tables lists the configurable parameters of the consul chart and t
 | `SerfwanUdpPort`        | Container serf wan UDP listening port | `8302`                                                     |
 | `ServerPort`            | Container server listening port       | `8300`                                                     |
 | `ConsulDnsPort`         | Container dns listening port          | `8600`                                                     |
+| `ui.enabled`            | Enable Consul Web UI                  | `false`                                                    |
+| `uiSerivce.enable`      | Create dedicated Consul Web UI service | `false`                                                    |
+| `uiService.type`        | Dedicate Consul Web UI service type   | `NodePort`                                                    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.

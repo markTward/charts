@@ -15,8 +15,18 @@ ConsulDnsPort: 8600
 Component: "consul"
 Replicas: 3
 Image: "consul"
-ImageTag: "v0.6.4"
+ImageTag: "0.7.1"
 ImagePullPolicy: "Always"
 Cpu: "100m"
 Memory: "512Mi"
 Storage: "1Gi"
+
+## Enable Consul Web UI
+##
+ui:
+  enabled: false
+## Create dedicated UI service
+##
+uiService:
+  enabled: false
+  type: "NodePort"
