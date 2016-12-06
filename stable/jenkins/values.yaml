@@ -5,7 +5,7 @@
 
 Master:
   Name: jenkins-master
-  Image: "quay.io/lachie83/jenkins-master-k8s"
+  Image: "quay.io/markTward/jenkins-master-k8s"
   ImageTag: "v0.1.4"
   ImagePullPolicy: "Always"
   Component: "jenkins-master"
@@ -22,7 +22,7 @@ Master:
   SlaveListenerPort: 50000
 
 Agent:
-  Image: quay.io/lachie83/jnlp-slave
+  Image: quay.io/markTward/jnlp-slave
   ImageTag: v8
   Cpu: "200m"
   Memory: "512Mi"
